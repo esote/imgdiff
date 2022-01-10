@@ -88,9 +88,7 @@ func difference(img1, img2 image.Image, min uint32, mask bool) (image.Image, err
 	out := image.NewRGBA(bounds)
 	for x := bounds.Min.X; x < bounds.Max.X; x++ {
 		for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
-			r1, g1, b1, a1 := color.RGBAModel.Convert(img1.At(x, y)).RGBA()
-			r2, g2, b2, a2 := color.RGBAModel.Convert(img2.At(x, y)).RGBA()
-			if udiff(r1, r2) > min || udiff(g1, g2) > min || udiff(b1, b2) > min || udiff(a1, a2) > min {
+			if colordiff(img1.At(x, y), img2.At(x, y), min) {
 				if mask {
 					out.SetRGBA(x, y, magenta)
 				} else {
@@ -102,6 +100,12 @@ func difference(img1, img2 image.Image, min uint32, mask bool) (image.Image, err
 		}
 	}
 	return out, nil
+}
+
+func colordiff(c1, c2 color.Color, min uint32) bool {
+	r1, g1, b1, a1 := color.RGBAModel.Convert(c1).RGBA()
+	r2, g2, b2, a2 := color.RGBAModel.Convert(c2).RGBA()
+	return udiff(r1, r2) > min || udiff(g1, g2) > min || udiff(b1, b2) > min || udiff(a1, a2) > min
 }
 
 func udiff(x, y uint32) uint32 {
