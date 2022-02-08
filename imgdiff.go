@@ -56,13 +56,13 @@ func main() {
 }
 
 func open(in1, in2 string) (img1, img2 image.Image, err error) {
-	file1, err := os.Open(flag.Arg(0))
+	file1, err := os.Open(in1)
 	if err != nil {
 		return
 	}
 	defer file1.Close()
 
-	file2, err := os.Open(flag.Arg(1))
+	file2, err := os.Open(in2)
 	if err != nil {
 		return
 	}
